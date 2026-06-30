@@ -5,19 +5,19 @@ const usuarios = [
 ]
 
 // GET todos los usuarios
-const getAll = () => {
+export const getAll = () => {
   return usuarios
 }
 
 // GET usuario por id
-const getById = (id) => {
+export const getById = (id) => {
   const usuario = usuarios.find((u) => u.id === parseInt(id))
   if (!usuario) return null
   return usuario
 }
 
 // POST crear usuario
-const create = (body) => {
+export const create = (body) => {
   const { usuario, password, rol } = body
   const nuevoId = usuarios.length > 0 ? Math.max(...usuarios.map((u) => u.id)) + 1 : 1
   const nuevoUsuario = { id: nuevoId, usuario, password, rol }
@@ -26,7 +26,7 @@ const create = (body) => {
 }
 
 // PUT actualizar usuario por id
-const update = (id, body) => {
+export const update = (id, body) => {
   const index = usuarios.findIndex((u) => u.id === parseInt(id))
   if (index === -1) return null
   usuarios[index] = { ...usuarios[index], ...body, id: parseInt(id) }
@@ -34,11 +34,9 @@ const update = (id, body) => {
 }
 
 // DELETE eliminar usuario por id
-const remove = (id) => {
+export const remove = (id) => {
   const index = usuarios.findIndex((u) => u.id === parseInt(id))
   if (index === -1) return null
   const eliminado = usuarios.splice(index, 1)
   return eliminado[0]
 }
-
-module.exports = { getAll, getById, create, update, remove }

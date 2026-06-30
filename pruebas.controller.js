@@ -1,15 +1,15 @@
-import { getAll as _getAll, getById as _getById, create as _create, update as _update, remove as _remove } from './pruebas.service.js'
+import * as service from './pruebas.service.js'
 
 // GET /usuarios
-const getAll = (req, res) => {
-  const usuarios = _getAll()
+export const getAll = (req, res) => {
+  const usuarios = service.getAll()
   res.json(usuarios)
 }
 
 // GET /usuarios/:id
-const getById = (req, res) => {
+export const getById = (req, res) => {
   const { id } = req.params
-  const usuario = _getById(id)
+  const usuario = service.getById(id)
   if (!usuario) {
     return res.status(404).json({ mensaje: `Usuario con id ${id} no encontrado` })
   }
@@ -17,19 +17,19 @@ const getById = (req, res) => {
 }
 
 // POST /usuarios
-const create = (req, res) => {
+export const create = (req, res) => {
   const { usuario, password, rol } = req.body
   if (!usuario || !password || !rol) {
     return res.status(400).json({ mensaje: 'Los campos usuario, password y rol son requeridos' })
   }
-  const nuevo = _create(req.body)
+  const nuevo = service.create(req.body)
   res.status(201).json({ mensaje: 'Usuario creado', data: nuevo })
 }
 
 // PUT /usuarios/:id
-const update = (req, res) => {
+export const update = (req, res) => {
   const { id } = req.params
-  const actualizado = _update(id, req.body)
+  const actualizado = service.update(id, req.body)
   if (!actualizado) {
     return res.status(404).json({ mensaje: `Usuario con id ${id} no encontrado` })
   }
@@ -37,13 +37,11 @@ const update = (req, res) => {
 }
 
 // DELETE /usuarios/:id
-const remove = (req, res) => {
+export const remove = (req, res) => {
   const { id } = req.params
-  const eliminado = _remove(id)
+  const eliminado = service.remove(id)
   if (!eliminado) {
     return res.status(404).json({ mensaje: `Usuario con id ${id} no encontrado` })
   }
   res.json({ mensaje: 'Usuario eliminado', data: eliminado })
 }
-
-export default { getAll, getById, create, update, remove }
