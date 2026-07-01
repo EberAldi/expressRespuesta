@@ -1,12 +1,15 @@
 import mongoose from 'mongoose'
+import dns from 'dns'
+
+dns.setServers(['8.8.8.8', '1.1.1.1'])
 
 export const connectDB = async () => {
   try {
     const uri = process.env.MONGO_URI
     await mongoose.connect(uri)
-    console.log('Conectado a MongoDB')
+    console.log('✅ Conectado a MongoDB')
   } catch (error) {
-    console.error('Error al conectar a MongoDB:', error.message)
+    console.error('❌ Error al conectar a MongoDB:', error.message)
     process.exit(1)
   }
 }
