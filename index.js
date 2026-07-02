@@ -11,12 +11,24 @@ import cors from 'cors';
 const app = express()
 const PORT = process.env.PORT || 3000
 
-//Cors
-app.use(cors(
-  {
-  origin: 'http://localhost:5173',
-}
-));
+// Cors
+const allowedOrigins = process.env.ALLOWED_ORIGINS
+  ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+  : ['http://localhost:5173'];
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Sin origin = Postman, curl, servidor-a-servidor -> permitir
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+
+    return callback(new Error(`CORS bloqueado para origin: ${origin}`));
+  },
+  credentials: true,
+}));
 
 app.use(express.json())
 
