@@ -4,11 +4,22 @@ import { connectDB } from './config/db.js'
 import * as usuarioController from './Controller/usuario.controller.js'
 import * as articulosController from './Controller/articulos.controller.js'
 import * as clientesController from './Controller/clientes.controller.js'
+import { login } from './Controller/autenticacion.controller.js';
+import { verificarToken } from './middleware/verificarToken.js';
+import cors from 'cors';
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
+//Cors
+app.use(cors(
+  {
+  origin: 'http://localhost:5173',
+}
+));
+
 app.use(express.json())
+
 
 // Usuarios
 app.get('/usuarios', usuarioController.getAll)
@@ -30,6 +41,12 @@ app.get('/clientes/:id', clientesController.getById)
 app.post('/clientes', clientesController.create)
 app.put('/clientes/:id', clientesController.update)
 app.delete('/clientes/:id', clientesController.remove)
+
+//Auth
+app.post('/autenticacion/login', login);
+
+
+
 
 connectDB().then(() => {
   app.listen(PORT, () => {
