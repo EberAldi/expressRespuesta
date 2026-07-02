@@ -11,24 +11,22 @@ import cors from 'cors';
 const app = express()
 const PORT = process.env.PORT || 3000
 
-// Cors
+// Cors config (queda lista aunque no se use)
 const allowedOrigins = process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
   : ['http://localhost:5173'];
 
-app.use(cors({
+const corsOptions = {
   origin: (origin, callback) => {
-    // Sin origin = Postman, curl, servidor-a-servidor -> permitir
     if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
+    if (allowedOrigins.includes(origin)) return callback(null, true);
     return callback(new Error(`CORS bloqueado para origin: ${origin}`));
   },
   credentials: true,
-}));
+};
+
+// Para desactivar CORS, comenta la siguiente línea:
+//app.use(cors(corsOptions));
 
 app.use(express.json())
 
